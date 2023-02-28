@@ -1,5 +1,11 @@
 # Week 1 — App Containerization
 
+##### Build both backend and frontend app
+
+- create docker for FE
+- create docker for BE
+- create docker-compose.yaml for building both FE and BE
+
 - create gitpod
 - create aws cloud9 for debugging/running code
   - learn some of the billing regarding the use of cloud9
