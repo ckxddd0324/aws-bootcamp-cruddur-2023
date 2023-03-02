@@ -1,5 +1,6 @@
 # Week 2 — Distributed Tracing
 
+<<<<<<< Updated upstream
 ##### Honeycomb setup
 
 - create account in honeycomb
@@ -25,3 +26,9 @@
     - anti-virus
     - firewall
     - etc
+=======
+###### Homework
+- Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD]
+- Add custom instrumentation to Honeycomb to add more attributes eg. UserId, Add a custom span
+- Run custom queries in Honeycomb and save them later eg. Latency by UserID, Recent Traces
+>>>>>>> Stashed changes
