@@ -3,12 +3,12 @@ FROM node:16.18
 WORKDIR /frontend-react-js
 
 ENV PORT=3000
+COPY . .
 
 COPY package.json package.json
-RUN npm install react-scripts
 RUN npm i
+RUN npm install react-scripts
 
-COPY . .
 
 EXPOSE ${PORT}
 CMD ["npm", "start"]
