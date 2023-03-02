@@ -5,6 +5,15 @@
 - create docker for FE
 - create docker for BE
 - create docker-compose.yaml for building both FE and BE
+- add notifcation page in flask and react
+
+add postegres and dynamo db
+
+- create dynamo items and table
+  - for dynamodb, https://github.com/100DaysOfCloud/challenge-dynamodb-local
+- add postgres to gitpod
+
+  - cmd to connect on gitpod `psql --host localhost -Upostgres`
 
 - create gitpod
 - create aws cloud9 for debugging/running code
@@ -80,3 +89,24 @@ cmd
   ```
     - can be use to scan images, instance, repo, lambda func
   ```
+
+###### Homework
+
+- Run the dockerfile CMD as an external script
+- Push and tag a image to DockerHub (they have a free tier)
+  - https://hub.docker.com/repository/docker/gn018681442/frontend-react-js/general
+  - https://hub.docker.com/repository/docker/gn018681442/backend-flask/general
+  - `docker build -g username:image/repo .`
+  - `docker push username:image_name`
+- Use multi-stage building for a Dockerfile build
+- Implement a healthcheck in the V3 Docker compose file
+- Research best practices of Dockerfiles and attempt to implement it in your Dockerfile
+  - create different build for different environemnt such as local dev, staging, production
+  - use multi stage build for production etc
+  - use offical docker iamge as base image
+    - - use smaller image
+  - vulnerability for image build
+  - not to use latest tag for image to deploy, use semantic versioning or image name:version/ hash
+  - optimizing for cache build
+  - use dockerignore file for node_modules, or cache
+  - use least privilieged user in image
