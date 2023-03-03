@@ -1,14 +1,18 @@
 from datetime import datetime, timedelta, timezone
-from opentelemetry import trace
+# from opentelemetry import trace
 
-tracer = trace.get_tracer("home.activities")
+# tracer = trace.get_tracer("home.activities")
 
 class HomeActivities:
+  # comment out cloudwatch logging
+    # def run(logger):
+    # comment out since it will be create logging and charges
+    # logger.info("HomeActivities")
   def run():
-    with tracer.start_as_current_span("home-activities-mock-data"):
+    # with tracer.start_as_current_span("home-activities-mock-data"):
       now = datetime.now(timezone.utc).astimezone()
-      span = trace.get_current_span()
-      span.set_attribute("app.now", now.isoformat())
+      # span = trace.get_current_span()
+      # span.set_attribute("app.now", now.isoformat())
       results = [{
         'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
         'handle':  'Andrew Brown',
@@ -48,7 +52,7 @@ class HomeActivities:
         'replies': []
       }
       ]
-      span.set_attribute("app.result_length", len(results))
+      # span.set_attribute("app.result_length", len(results))
       return results
 
     
