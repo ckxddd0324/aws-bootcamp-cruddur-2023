@@ -110,3 +110,8 @@ cmd
   - optimizing for cache build
   - use dockerignore file for node_modules, or cache
   - use least privilieged user in image
+
+FLASK_ADDRESS="https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+aws xray create-group \
+ --group-name "Cruddur" \
+ --filter-expression "service(\"backend-flask\")
