@@ -3,6 +3,8 @@ from flask import request
 from flask_cors import CORS, cross_origin
 import os
 
+from lib.cognito_token_verification import CognitoTokenVerification, extract_access_token, TokenVerifyError
+
 # honeycomb ---------
 from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
@@ -68,6 +70,13 @@ xray_url = os.getenv("AWS_XRAY_URL")
 xray_recorder.configure(service='Cruddur', dynamic_naming=xray_url)
 
 app = Flask(__name__)
+
+cognito_token_verification = CognitoTokenVerification(
+  user_pool_id=os.getenv('AWS_COGNITO_USER_POOL_ID'), 
+  user_pool_client_id=os.getenv('AWS_COGNITO_USER_POOL_CLIENT_ID'), 
+  region=os.getenv('AWS_DEFAULT_REGION')
+)
+
 # comment xrayfor charges 
 XRayMiddleware(app, xray_recorder)
 
@@ -93,7 +102,7 @@ def init_rollbar():
 
     # send exceptions from `app` to rollbar, using flask's signal system.
     got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
-    
+
 # Flask
 frontend = os.getenv('FRONTEND_URL')
 backend = os.getenv('BACKEND_URL')
@@ -101,11 +110,10 @@ origins = [frontend, backend]
 cors = CORS(
   app, 
   resources={r"/api/*": {"origins": origins}},
-  expose_headers="location,link",
-  allow_headers="content-type,if-modified-since",
+  headers=['Content-Type', 'Authorization'], 
+  expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
 )
-
 # cloudwatch log
 # comment out since it will be create logging and charges
 # @app.after_request
@@ -159,7 +167,21 @@ def data_create_message():
 def data_home():
   # comment out since it will be create logging and charges
   # data = HomeActivities.run(logger=LOGGER)
-  data = HomeActivities.run()
+  # aws cognito
+
+  access_token = extract_access_token(request.headers)
+  try:
+    claims = cognito_token_verification.verify(access_token)
+    app.logger.debug('auth success')
+    app.logger.debug(claims)
+    app.logger.debug(claims['username'])
+    data = HomeActivities.run(cognito_user_id=claims['username'])
+  except TokenVerifyError as e:
+    _ = request.data
+    app.logger.debug(e)
+    app.logger.debug('fail auth')
+    data = HomeActivities.run()
+
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])
